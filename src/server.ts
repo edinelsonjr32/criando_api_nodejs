@@ -17,16 +17,32 @@
  * package.json e adicione na chave scripts
  * 
  * "scripts": {
-    "dev": "tsx watch src/server.ts"
+  *  "dev": "tsx watch src/server.ts"
+  *},
+
+  *Instalar o EsLint:
+  *npm install eslint @rocketseat/eslint-config -D  
+
+  Para funcionar o eslint e modificar ao salvar, você deve ir no arquivo de configuração Open User Settings Json
+  "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+  } 
+
+  Além disso deve adicionar um script para atualizar automaticamente todos os arquivos .ts
+  ao rodar o comando pra startar o servidor no arquivo package.json
+  "scripts": {
+  
+    "lint": "eslint src --ext .ts --fix"
   },
+  alem de mostrar o erro, ele tenta corrigir automaticamente
  */
 
-import fastify from "fastify";
+import fastify from 'fastify'
 
 const app = fastify()
 
-//Métodos de Rotas
 /**
+ * Métodos de Rotas
  * GET
  * POST
  * PUT
@@ -34,14 +50,17 @@ const app = fastify()
  * DELETE
  */
 
-//http:localhost:3333/hello
-app.get('/hello', ()=>{
-    return 'hello World Edinelson'
+// http:localhost:3333/hello
+app.get(`"/hello"`, () => {
+  return `"hello World Edinelson"`
 })
 
-app.listen({
-    port: 3333
-}).then(()=>{
-    console.log('HTTP SERVER RUNING✅✅✅✅');
-    
-})
+app
+  .listen({
+    port: 3333,
+  })
+  .then(() => {
+    console.log('HTTP SERVER RUNING✅✅✅✅')
+  })
+
+// Eslint => Processo de Padronizar o código
