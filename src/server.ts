@@ -35,9 +35,17 @@
     "lint": "eslint src --ext .ts --fix"
   },
   alem de mostrar o erro, ele tenta corrigir automaticamente
+
+  Instalar o knex para trabalhar com query buikder
+  npm install knex --save
+
+  instalar o driver
+  
+  npm install better-sqlite3
  */
 
 import fastify from 'fastify'
+import { knex } from './database'
 
 const app = fastify()
 
@@ -51,8 +59,9 @@ const app = fastify()
  */
 
 // http:localhost:3333/hello
-app.get(`"/hello"`, () => {
-  return `"hello World Edinelson"`
+app.get('/hello', async () => {
+  const tables = await knex('sqlite_schema').select('*')
+  return tables
 })
 
 app
