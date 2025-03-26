@@ -42,6 +42,12 @@
   instalar o driver
   
   npm install better-sqlite3
+
+  npm install knex -g
+
+  npm install sqlite3 --save
+
+  knex init -x ts
  */
 
 import fastify from 'fastify'
