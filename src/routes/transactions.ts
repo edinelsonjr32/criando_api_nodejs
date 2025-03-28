@@ -1,11 +1,20 @@
 import { FastifyInstance } from 'fastify'
 import { knex } from '../database'
-import crypto from 'node:crypto'
+import crypto, { randomUUID } from 'node:crypto'
 import { z } from 'zod'
 
+// cookies <-> Formas da gente manter contexto entre requisições
+//
+/**
+ *
+ * Para trabalhar com o fastify/cookie
+ *
+ * npm i @fastity/cookie
+ */
+
 export async function transactionsRoutes(app: FastifyInstance) {
+  // Crirar a transação
   app.post('/', async (request, response) => {
-    // inserindo dados na tabela
     const createTransactionBodySchema = z.object({
       title: z.string(),
       amount: z.number(),
@@ -16,10 +25,20 @@ export async function transactionsRoutes(app: FastifyInstance) {
       request.body,
     )
 
+    let sessionId = request.cookies.sessionId
+
+    if (!sessionId) {
+      sessionId = randomUUID()
+      response.cookie('session_id', sessionId, {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+      })
+    }
     await knex('transactions').insert({
       id: crypto.randomUUID(),
       title,
       amount: type === 'credit' ? amount : amount * -1,
+      session_id: sessionId,
     })
 
     // HTTP codes ()
@@ -33,6 +52,7 @@ export async function transactionsRoutes(app: FastifyInstance) {
     return { transactions }
   })
 
+  // buscar uma transação especifica
   app.get('/:id', async (request) => {
     const getTransactionParamsSchema = z.object({
       id: z.string().uuid(),
@@ -44,6 +64,7 @@ export async function transactionsRoutes(app: FastifyInstance) {
     return { transaction }
   })
 
+  // somar todas as transações
   app.get('/sumary', async () => {
     const sumary = await knex('transactions')
       .sum('amount', { as: 'amount' })
