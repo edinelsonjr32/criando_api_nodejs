@@ -1,3 +1,4 @@
+import { env } from 'process'
 /**
  * Para instalar o fastify:
  * npm i fastify
@@ -53,6 +54,7 @@
 import fastify from 'fastify'
 import { knex } from './database'
 import crypto from 'node:crypto'
+import { envVariables } from './env/'
 const app = fastify()
 
 /**
@@ -87,7 +89,7 @@ app.get('/buscar', async () => {
 
 app
   .listen({
-    port: 3333,
+    port: envVariables.PORT,
   })
   .then(() => {
     console.log('HTTP SERVER RUNING✅✅✅✅')
