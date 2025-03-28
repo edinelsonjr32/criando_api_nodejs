@@ -1,4 +1,3 @@
-import { env } from 'process'
 /**
  * Para instalar o fastify:
  * npm i fastify
@@ -49,14 +48,18 @@ import { env } from 'process'
   npm install sqlite3 --save
 
   knex init -x ts
+
+  Plugins do fastify
+
  */
 
 import fastify from 'fastify'
-import { knex } from './database'
-import crypto from 'node:crypto'
+
 import { envVariables } from './env/'
+import { transactionsRoutes } from './routes/transactions'
 const app = fastify()
 
+app.register(transactionsRoutes)
 /**
  * Métodos de Rotas
  * GET
@@ -67,25 +70,6 @@ const app = fastify()
  */
 
 // http:localhost:3333/hello
-app.get('/hello', async () => {
-  // inserindo dados na tabela
-  const transaction = await knex('transactions')
-    .insert({
-      id: crypto.randomUUID(),
-      title: 'transação de teste',
-      amount: 1000,
-    })
-    .returning('*')
-
-  return transaction
-})
-
-app.get('/buscar', async () => {
-  // inserindo dados na tabela
-  const transaction = await knex('transactions').select('*')
-
-  return transaction
-})
 
 app
   .listen({
