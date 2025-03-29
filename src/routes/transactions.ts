@@ -3,6 +3,7 @@ import { knex } from '../database'
 import crypto, { randomUUID } from 'node:crypto'
 import { z } from 'zod'
 import { checkSessionIdExists } from '../middlewares/check-session-id-existes'
+import { request } from 'node:http'
 
 // cookies <-> Formas da gente manter contexto entre requisições
 //
@@ -15,6 +16,7 @@ import { checkSessionIdExists } from '../middlewares/check-session-id-existes'
 
 export async function transactionsRoutes(app: FastifyInstance) {
   // Crirar a transação
+
   app.post('/', async (request, response) => {
     const createTransactionBodySchema = z.object({
       title: z.string(),
