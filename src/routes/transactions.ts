@@ -3,7 +3,17 @@ import { knex } from '../database'
 import crypto, { randomUUID } from 'node:crypto'
 import { z } from 'zod'
 import { checkSessionIdExists } from '../middlewares/check-session-id-existes'
-import { request } from 'node:http'
+
+/**
+ * Testes:
+ * Unitários: testar uma unidade da aplicação
+ * Integração: Comunicação de duas ou mais unidades
+ * Ponta a ponta: Simulam um usuário operando a aplicação
+ * front-end: abre a pagina de login, digite o texto
+ * back-end: chamadas http, websocket
+ * Pirâmide de Testes:
+ * E2E (não dependem de tecnologia, não depende de nada)
+ */
 
 // cookies <-> Formas da gente manter contexto entre requisições
 //
