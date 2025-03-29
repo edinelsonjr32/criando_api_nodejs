@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "lint": "eslint src --ext .ts --fix",
-    "knex": "node --no-warning --import tsx ./node_modules/.bin/knex"
+    "knex": "node --no-warning --import tsx ./node_modules/.bin/knex",
+    "test": "vitest"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,8 @@
     "sucrase": "^3.35.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.3",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.9"
   },
   "dependencies": {
     "@fastify/cookie": "^11.0.2",

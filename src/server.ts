@@ -51,6 +51,8 @@
 
   Plugins do fastify
 
+  Teste: https://vitest.dev/
+  npm i vitest -D   
  */
 
 import fastify from 'fastify'
