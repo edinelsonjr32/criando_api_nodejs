@@ -1,40 +1,30 @@
-import { beforeAll, afterAll, describe, it, expect } from 'vitest'
-import { app } from '../src/app'
-
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+import { execSync } from 'node:child_process'
 import request from 'supertest'
-/**
- * Para rodar o teste execute:
- *
- * npx vitest
- *
- * alterar no package.json adicionando um comando
- *
- * test
- *
- *
- * Adicionar uma nova dependencia:
- * Supertest
- * npm install supertest -D
- *
- * npm install --save @types/supertest -D
- *
- */
+import { app } from '../src/app'
 
 describe('Transactions routes', () => {
   beforeAll(async () => {
     await app.ready()
   })
+
   afterAll(async () => {
     await app.close()
   })
 
+  beforeEach(() => {
+    execSync('npx knex migrate:rollback --all')
+    execSync('npx knex migrate:latest')
+
+    console.log(process)
+  })
+
   it('should be able to create a new transaction', async () => {
-    // fazer chamada http p criar uma nova transação
     await request(app.server)
       .post('/transactions')
       .send({
-        title: 'New Transaction',
-        amount: 1000,
+        title: 'New transaction',
+        amount: 5000,
         type: 'credit',
       })
       .expect(201)
@@ -44,22 +34,22 @@ describe('Transactions routes', () => {
     const createTransactionResponse = await request(app.server)
       .post('/transactions')
       .send({
-        title: 'New Transaction',
-        amount: 1000,
+        title: 'New transaction',
+        amount: 5000,
         type: 'credit',
       })
 
-    const cookies = createTransactionResponse.get('Set-Cookie')
+    const cookies = createTransactionResponse.get('Set-Cookie')!
 
-    const listTransactionResponse = await request(app.server)
+    const listTransactionsResponse = await request(app.server)
       .get('/transactions')
       .set('Cookie', cookies)
       .expect(200)
 
-    expect(listTransactionResponse.body.transactions).toEqual([
+    expect(listTransactionsResponse.body.transactions).toEqual([
       expect.objectContaining({
-        title: 'New Transaction',
-        amount: 1000,
+        title: 'New transaction',
+        amount: 5000,
       }),
     ])
   })
